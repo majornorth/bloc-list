@@ -40,7 +40,7 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
 }]);
 
 blocList.controller('Second.controller', ['$scope', function($scope) {
-    $scope.subText = "Barnie!";
+    $scope.subText = "Barnie and Friends!";
 }]);
 
 },{}]},{},[1]);
