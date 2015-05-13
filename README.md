@@ -1,18 +1,9 @@
-Bloc Base Project
+BlocList
 =================
 
-A base for Bloc frontend projects.
+A self-destructing task list built with AngularJS and Firebase.
 
 ## Configuration
-
-Configuring this project should be consistent across Nitrous, Mac (local), and Vagrant.
-
-Start by cloning the repository
-
-```
-$ git clone https://github.com/Bloc/base-frontend-project.git <your-frontend-project-name>
-```
-
 The project uses Grunt to run tasks (detailed below); start by installing the Grunt Command Line Interface (`grunt-cli`) globally on your machine.
 
 ```
