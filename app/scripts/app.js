@@ -32,7 +32,8 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
         }
         $scope.todos.$add({
             title: newTodo,
-            completed: false
+            completed: false,
+            submitted: Date.now()
         });
         $scope.newTodo = '';
     };
