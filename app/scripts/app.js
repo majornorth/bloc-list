@@ -32,9 +32,18 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
         }
         $scope.todos.$add({
             title: newTodo,
-            completed: false
+            completed: false,
+            submitted: Date.now(),
+            expiryDate: Date.now() + 604800000
         });
         $scope.newTodo = '';
+    };
+
+    $scope.hideExpired = function () {
+        var expiryDate = this.todo.expiryDate;
+        var timeNow = Date.now();
+        var result = expiryDate < timeNow;
+        return result;
     };
 }]);
 
