@@ -1,0 +1,15 @@
+<h1>todos</h1>
+<ul>
+    <li><a ui-sref="landing">Active tasks</a></li>
+    <li><a ui-sref="history">Task history</a></li>
+</ul>
+<section>
+    <ul id="todo-list">
+        <li ng-repeat="todo in todos" ng-show="hideActive() || todo.completed === true">
+            <div class="view">
+                <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
+                <label>{{todo.title}}</label>
+            </div>
+        </li>
+    </ul>
+</section>
