@@ -8,18 +8,16 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
     .state('landing', {
         url: '/',
         controller: 'Landing.controller',
-        templateUrl: '/templates/turnup.html'
+        templateUrl: '/templates/landing.html'
     })
-    .state('second', {
-        url: '/second',
-        controller: 'Second.controller',
-        templateUrl: '/templates/second.html'
+    .state('history', {
+        url: '/history',
+        controller: 'History.controller',
+        templateUrl: '/templates/history.html'
     });
 }]);
 
 blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
-    $scope.subText = "Turn the music up!";
-
     var url = 'https://bloc-list.firebaseio.com/todos';
     var fireRef = new Firebase(url);
 
@@ -31,11 +29,14 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
         if (!newTodo.length) {
             return;
         }
+
+        var todoDuration = 604800000;
+
         $scope.todos.$add({
             title: newTodo,
             completed: false,
             submitted: Date.now(),
-            expiryDate: Date.now() + 604800000
+            expiryDate: Date.now() + todoDuration
         });
         $scope.newTodo = '';
     };
@@ -48,8 +49,18 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
     };
 }]);
 
-blocList.controller('Second.controller', ['$scope', function($scope) {
-    $scope.subText = "Barnie and Friends!";
+blocList.controller('History.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
+    var url = 'https://bloc-list.firebaseio.com/todos';
+    var fireRef = new Firebase(url);
+
+    $scope.todos = $firebaseArray(fireRef);
+
+    $scope.hideActive = function () {
+        var expiryDate = this.todo.expiryDate;
+        var timeNow = Date.now();
+        var result = expiryDate < timeNow;
+        return result;
+    };
 }]);
 
 },{}]},{},[1]);
