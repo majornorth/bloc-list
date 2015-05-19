@@ -22,20 +22,23 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
 
     $scope.todos = $firebaseArray(fireRef);
     $scope.newTodo = '';
+    $scope.todoPriority = 'Select Priority';
 
     $scope.addTodo = function () {
         var newTodo = $scope.newTodo.trim();
         if (!newTodo.length) {
             return;
         }
+        var todoPriority = $scope.todoPriority;
 
-        var todoDuration = 604800000;
+        var sevenDaysFromNow = 604800000;
 
         $scope.todos.$add({
             title: newTodo,
+            priority: todoPriority,
             completed: false,
             submitted: Date.now(),
-            expiryDate: Date.now() + todoDuration
+            expiryDate: Date.now() + sevenDaysFromNow
         });
         $scope.newTodo = '';
     };
@@ -54,7 +57,7 @@ blocList.controller('History.controller', ['$scope', '$firebaseArray', function(
 
     $scope.todos = $firebaseArray(fireRef);
 
-    $scope.hideActive = function () {
+    $scope.hideActive = function (todo) {
         var expiryDate = this.todo.expiryDate;
         var timeNow = Date.now();
         var result = expiryDate < timeNow;
