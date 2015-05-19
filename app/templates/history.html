@@ -5,10 +5,10 @@
 </ul>
 <section>
     <ul id="todo-list">
-        <li ng-repeat="todo in todos" ng-show="hideActive() || todo.completed === true">
+        <li ng-repeat="todo in todos" ng-show="hideActive(todo) || todo.completed === true">
             <div class="view">
                 <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
-                <label>{{todo.title}}</label>
+                <label>{{todo.title}} <span>({{todo.priority}})</span></label>
             </div>
         </li>
     </ul>

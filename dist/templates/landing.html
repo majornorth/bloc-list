@@ -6,6 +6,12 @@
     </ul>
 </nav>
 <form id="todo-form" novalidate ng-submit="addTodo()">
+    <select name="todoPriority" ng-model="todoPriority">
+        <option>Select Priority</option>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+    </select>
     <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" required>
 </form>
 <section>
@@ -13,7 +19,7 @@
         <li ng-repeat="todo in todos" ng-hide="hideExpired() || todo.completed === true">
             <div class="view">
                 <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
-                <label>{{todo.title}}</label>
+                <label>{{todo.title}} <span>({{todo.priority}})</span></label>
             </div>
         </li>
     </ul>
