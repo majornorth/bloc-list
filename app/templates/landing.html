@@ -10,13 +10,13 @@
         <option>Select Priority</option>
         <option value="low">Low</option>
         <option value="medium">Medium</option>
-        <option value="high">High</option>
+        <option value="urgent">Urgent</option>
     </select>
     <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" required>
 </form>
 <section>
     <ul id="todo-list">
-        <li ng-repeat="todo in todos" ng-hide="hideExpired() || todo.completed === true">
+        <li ng-repeat="todo in todos | orderBy: '-priority'" ng-hide="hideExpired() || todo.completed === true">
             <div class="view">
                 <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
                 <label>{{todo.title}} <span>({{todo.priority}})</span></label>
