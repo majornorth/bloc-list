@@ -1,3 +1,13 @@
+<div ng-controller="Auth.controller">
+    <h3>Sign up</h3>
+    Email: <input type="text" ng-model="email">
+    Password: <input type="password" ng-model="password">
+    <button ng-click="createUser()">Create User</button>
+    <br />
+    <p ng-if="message">Message: <strong>{{ message }}</strong></p>
+    <p ng-if="error">Error: <strong>{{ error }}</strong></p>
+</div>
+
 <h1>todos</h1>
 <nav>
     <ul>

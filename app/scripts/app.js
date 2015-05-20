@@ -64,3 +64,26 @@ blocList.controller('History.controller', ['$scope', '$firebaseArray', function(
         return result;
     };
 }]);
+
+blocList.factory("Auth", ["$firebaseAuth",
+  function($firebaseAuth) {
+    var ref = new Firebase("https://bloc-list.firebaseio.com");
+    return $firebaseAuth(ref);
+  }
+]);
+
+blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth) {
+    $scope.createUser = function() {
+        $scope.message = null;
+        $scope.error = null;
+
+        Auth.$createUser({
+         email: $scope.email,
+         password: $scope.password
+        }).then(function() {
+            $scope.message = "User created!";
+        }).catch(function(error) {
+            $scope.error = error;
+        });
+    };
+}]);
