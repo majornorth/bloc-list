@@ -1,11 +1,21 @@
 <div ng-controller="Auth.controller">
-    <h3>Sign up</h3>
-    Email: <input type="text" ng-model="email">
-    Password: <input type="password" ng-model="password">
-    <button ng-click="createUser()">Create User</button>
-    <br />
-    <p ng-if="message">Message: <strong>{{ message }}</strong></p>
-    <p ng-if="error">Error: <strong>{{ error }}</strong></p>
+    <div ng-hide="isUserSignedIn()">
+        <h3>Sign up</h3>
+        Email: <input type="text" ng-model="signup.email">
+        Password: <input type="password" ng-model="signup.password">
+        <button ng-click="createUser()">Create User</button>
+    </div>
+
+    <div ng-hide="isUserSignedIn()">
+        <h3>Sign in</h3>
+        Email: <input type="text" ng-model="signin.email">
+        Password: <input type="password" ng-model="signin.password">
+        <button ng-click="signUserIn()">Sign In</button>
+    </div>
+
+    <div ng-show="isUserSignedIn()">
+      {{ userData.password.email }} | <a href="#" ng-click="userData.authData.$unauth()">Logout</a>
+    </div>
 </div>
 
 <h1>todos</h1>
