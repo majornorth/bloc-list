@@ -64,3 +64,60 @@ blocList.controller('History.controller', ['$scope', '$firebaseArray', function(
         return result;
     };
 }]);
+
+blocList.factory("Auth", ["$firebaseAuth",
+  function($firebaseAuth) {
+    var ref = new Firebase("https://bloc-list.firebaseio.com");
+    return $firebaseAuth(ref);
+  }
+]);
+
+blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth) {
+    $scope.createUser = function() {
+        Auth.$createUser({
+            email: $scope.signup.email,
+            password: $scope.signup.password
+        }).then(function(userData) {
+            Auth.$authWithPassword({
+                email: $scope.signup.email,
+                password: $scope.signup.password
+            }).then(function(authData) {
+                console.log("Logged in as:", authData);
+            }).catch(function(error) {
+                console.error("Authentication failed:", error);
+            });
+        }).catch(function(error) {
+            console.log("There was an error: " + error);
+        });
+    };
+
+    $scope.signUserIn = function() {
+        Auth.$authWithPassword({
+            email: $scope.signin.email,
+            password: $scope.signin.password
+        }).then(function(authData) {
+            console.log("Logged in as:", authData);
+        }).catch(function(error) {
+            console.error("Authentication failed:", error);
+        });
+    };
+
+    $scope.isUserSignedIn = function() {
+        authData = Auth.$getAuth();
+
+        if (authData) {
+            $scope.userData = {
+                email: authData.password.email,
+                password: authData.password,
+                authData: Auth
+            };
+        }
+
+        return authData;
+    };
+
+    $scope.logAuthData = function() {
+        authData = Auth.$getAuth();
+        console.log(Auth);
+    };
+}]);
