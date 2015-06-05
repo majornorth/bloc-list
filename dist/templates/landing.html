@@ -9,7 +9,7 @@
     <div ng-hide="authData">
         <h3>Sign in</h3>
         Email: <input type="text" ng-model="signin.email">
-        Password: <input type="password" ng-model="signin.password" ng-keyup="$event.keyCode == 13 ? signUserIn() : null" >
+        Password: <input type="password" ng-model="signin.password" ng-enter="signUserIn()">
         <button ng-click="signUserIn()">Sign In</button>
     </div>
 

@@ -78,22 +78,22 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
         var result = expiryDate < timeNow;
         return result;
     };
-
-    /* This directive allows us to pass a function in on an enter key to do what we want. */
-    blocList.directive('ngEnter', function () {
-        return function (scope, element, attrs) {
-            element.bind("keydown keypress", function (event) {
-                if(event.which === 13) {
-                    scope.$apply(function (){
-                        scope.$eval(attrs.ngEnter);
-                    });
-
-                    event.preventDefault();
-                }
-            });
-        };
-    });
 }]);
+
+/* This directive allows us to pass a function in on an enter key to do what we want. */
+blocList.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
 
 blocList.controller('History.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
     var url = 'https://bloc-list.firebaseio.com/todos';
@@ -166,21 +166,6 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth)
         console.log(Auth);
         return authData;
     };
-
-    /* This directive allows us to pass a function in on an enter key to do what we want. */
-    blocList.directive('ngEnter', function () {
-        return function (scope, element, attrs) {
-            element.bind("keydown keypress", function (event) {
-                if(event.which === 13) {
-                    scope.$apply(function (){
-                        scope.$eval(attrs.ngEnter);
-                    });
-
-                    event.preventDefault();
-                }
-            });
-        };
-    });
 }]);
 
 },{}]},{},[1]);
