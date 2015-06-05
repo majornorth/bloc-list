@@ -9,12 +9,12 @@
     <div ng-hide="authData">
         <h3>Sign in</h3>
         Email: <input type="text" ng-model="signin.email">
-        Password: <input type="password" ng-model="signin.password">
+        Password: <input type="password" ng-model="signin.password" ng-keyup="$event.keyCode == 13 ? signUserIn() : null" >
         <button ng-click="signUserIn()">Sign In</button>
     </div>
 
     <div ng-show="authData">
-      {{ authData.password.email }} | <a href="#" ng-click="auth.$unauth()">Logout</a>
+      {{ authData.password.email }} | <a href="#" ng-click="logUserOut()">Logout</a>
     </div>
 
     <div ng-show="authData">
@@ -30,6 +30,7 @@
                 <option value="" disabled required>Select Priority</option>
             </select>
             <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodoObject.todoTitle" required>
+            <div ng-model="priorityUndefinedTrue" ng-if="priorityUndefinedTrue">{{ priorityUndefinedError }}</div>
         </form>
         <section>
             <ul id="todo-list">

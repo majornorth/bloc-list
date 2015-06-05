@@ -24,7 +24,7 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
 
     $scope.newTodoObject = {
         todoTitle: '',
-        todoPriority: null
+        todoPriority: ''
     };
 
     $scope.priorityOptions = [
@@ -48,18 +48,27 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
             return;
         }
 
+        var priorityValue = $scope.newTodoObject.todoPriority.value;
+
+        if (priorityValue === undefined) {
+            $scope.priorityUndefinedError = 'Please select a priority level for your todo';
+            $scope.priorityUndefinedTrue = true;
+            return;
+        }
+
         var sevenDaysFromNow = 604800000;
 
         $scope.todos.$add({
             title: newTodo,
-            priority: $scope.newTodoObject.todoPriority.value,
+            priority: priorityValue,
             completed: false,
             submitted: Date.now(),
             expiryDate: Date.now() + sevenDaysFromNow
         });
 
         $scope.newTodoObject.todoTitle = '';
-        $scope.newTodoObject.todoPriority = null;
+        $scope.newTodoObject.todoPriority = '';
+        $scope.priorityUndefinedTrue = false;
     };
 
     $scope.hideExpired = function () {
@@ -68,6 +77,21 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
         var result = expiryDate < timeNow;
         return result;
     };
+
+    /* This directive allows us to pass a function in on an enter key to do what we want. */
+    blocList.directive('ngEnter', function () {
+        return function (scope, element, attrs) {
+            element.bind("keydown keypress", function (event) {
+                if(event.which === 13) {
+                    scope.$apply(function (){
+                        scope.$eval(attrs.ngEnter);
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
+    });
 }]);
 
 blocList.controller('History.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
@@ -123,9 +147,17 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth)
             password: $scope.signin.password
         }).then(function(authData) {
             console.log("Logged in as:", authData);
+            console.log($scope);
         }).catch(function(error) {
             console.error("Authentication failed:", error);
         });
+    };
+
+    $scope.logUserOut = function () {
+        console.log($scope);
+        $scope.signin.email = '';
+        $scope.signin.password = '';
+        Auth.$unauth();
     };
 
     $scope.logAuthData = function() {
@@ -133,4 +165,19 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth)
         console.log(Auth);
         return authData;
     };
+
+    /* This directive allows us to pass a function in on an enter key to do what we want. */
+    blocList.directive('ngEnter', function () {
+        return function (scope, element, attrs) {
+            element.bind("keydown keypress", function (event) {
+                if(event.which === 13) {
+                    scope.$apply(function (){
+                        scope.$eval(attrs.ngEnter);
+                    });
+
+                    event.preventDefault();
+                }
+            });
+        };
+    });
 }]);
