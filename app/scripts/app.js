@@ -21,26 +21,45 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
     var fireRef = new Firebase(url);
 
     $scope.todos = $firebaseArray(fireRef);
-    $scope.newTodo = '';
-    $scope.todoPriority = 'Select Priority';
+
+    $scope.newTodoObject = {
+        todoTitle: '',
+        todoPriority: null
+    };
+
+    $scope.priorityOptions = [
+        {
+          name: 'Low',
+          value: 'low'
+        },
+        {
+          name: 'Medium',
+          value: 'medium'
+        },
+        {
+          name: 'Urgent',
+          value: 'urgent'
+        },
+    ];
 
     $scope.addTodo = function () {
-        var newTodo = $scope.newTodo.trim();
+        var newTodo = $scope.newTodoObject.todoTitle.trim();
         if (!newTodo.length) {
             return;
         }
-        var todoPriority = $scope.todoPriority;
 
         var sevenDaysFromNow = 604800000;
 
         $scope.todos.$add({
             title: newTodo,
-            priority: todoPriority,
+            priority: $scope.newTodoObject.todoPriority.value,
             completed: false,
             submitted: Date.now(),
             expiryDate: Date.now() + sevenDaysFromNow
         });
-        $scope.newTodo = '';
+
+        $scope.newTodoObject.todoTitle = '';
+        $scope.newTodoObject.todoPriority = null;
     };
 
     $scope.hideExpired = function () {
@@ -73,6 +92,13 @@ blocList.factory("Auth", ["$firebaseAuth",
 ]);
 
 blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth) {
+    $scope.auth = Auth;
+
+    // any time auth status updates, add the user data to scope
+    $scope.auth.$onAuth(function(authData) {
+      $scope.authData = authData;
+    });
+
     $scope.createUser = function() {
         Auth.$createUser({
             email: $scope.signup.email,
@@ -102,22 +128,9 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth)
         });
     };
 
-    $scope.isUserSignedIn = function() {
-        authData = Auth.$getAuth();
-
-        if (authData) {
-            $scope.userData = {
-                email: authData.password.email,
-                password: authData.password,
-                authData: Auth
-            };
-        }
-
-        return authData;
-    };
-
     $scope.logAuthData = function() {
         authData = Auth.$getAuth();
         console.log(Auth);
+        return authData;
     };
 }]);

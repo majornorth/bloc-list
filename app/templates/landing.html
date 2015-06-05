@@ -1,46 +1,45 @@
 <div ng-controller="Auth.controller">
-    <div ng-hide="isUserSignedIn()">
+    <div ng-hide="authData">
         <h3>Sign up</h3>
         Email: <input type="text" ng-model="signup.email">
         Password: <input type="password" ng-model="signup.password">
         <button ng-click="createUser()">Create User</button>
     </div>
 
-    <div ng-hide="isUserSignedIn()">
+    <div ng-hide="authData">
         <h3>Sign in</h3>
         Email: <input type="text" ng-model="signin.email">
         Password: <input type="password" ng-model="signin.password">
         <button ng-click="signUserIn()">Sign In</button>
     </div>
 
-    <div ng-show="isUserSignedIn()">
-      {{ userData.password.email }} | <a href="#" ng-click="userData.authData.$unauth()">Logout</a>
+    <div ng-show="authData">
+      {{ authData.password.email }} | <a href="#" ng-click="auth.$unauth()">Logout</a>
+    </div>
+
+    <div ng-show="authData">
+        <h1>todos</h1>
+        <nav>
+            <ul>
+                <li><a ui-sref="landing">Active tasks</a></li>
+                <li><a ui-sref="history">Task history</a></li>
+            </ul>
+        </nav>
+        <form ng-controller="Landing.controller" id="todo-form" novalidate ng-submit="addTodo()">
+            <select name="todoPriority" ng-model="newTodoObject.todoPriority" ng-options="option.name for option in priorityOptions track by option.value">
+                <option value="" disabled required>Select Priority</option>
+            </select>
+            <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodoObject.todoTitle" required>
+        </form>
+        <section>
+            <ul id="todo-list">
+                <li ng-repeat="todo in todos | orderBy: '-priority'" ng-hide="hideExpired() || todo.completed === true">
+                    <div class="view">
+                        <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
+                        <label>{{todo.title}} <span>({{todo.priority}})</span></label>
+                    </div>
+                </li>
+            </ul>
+        </section>
     </div>
 </div>
-
-<h1>todos</h1>
-<nav>
-    <ul>
-        <li><a ui-sref="landing">Active tasks</a></li>
-        <li><a ui-sref="history">Task history</a></li>
-    </ul>
-</nav>
-<form id="todo-form" novalidate ng-submit="addTodo()">
-    <select name="todoPriority" ng-model="todoPriority">
-        <option>Select Priority</option>
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="urgent">Urgent</option>
-    </select>
-    <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" required>
-</form>
-<section>
-    <ul id="todo-list">
-        <li ng-repeat="todo in todos | orderBy: '-priority'" ng-hide="hideExpired() || todo.completed === true">
-            <div class="view">
-                <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
-                <label>{{todo.title}} <span>({{todo.priority}})</span></label>
-            </div>
-        </li>
-    </ul>
-</section>
