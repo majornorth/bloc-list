@@ -17,9 +17,14 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
     });
 }]);
 
-blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
-    var url = 'https://bloc-list.firebaseio.com/todos';
-    var fireRef = new Firebase(url);
+blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', function($scope, $firebaseArray, Auth) {
+    var authData = Auth.$getAuth();
+    if (authData) {
+        var url = 'https://bloc-list.firebaseio.com/todos/' + authData.uid;
+        var fireRef = new Firebase(url);
+    } else {
+        return
+    }
 
     $scope.todos = $firebaseArray(fireRef);
 
@@ -95,8 +100,14 @@ blocList.directive('ngEnter', function () {
     };
 });
 
-blocList.controller('History.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
-    var url = 'https://bloc-list.firebaseio.com/todos';
+blocList.controller('History.controller', ['$scope', '$firebaseArray', 'Auth', function($scope, $firebaseArray, Auth) {
+    var authData = Auth.$getAuth();
+        if (authData) {
+        var url = 'https://bloc-list.firebaseio.com/todos/' + authData.uid;
+        var fireRef = new Firebase(url);
+    } else {
+        return
+    }
     var fireRef = new Firebase(url);
 
     $scope.todos = $firebaseArray(fireRef);
@@ -147,17 +158,18 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth)
             email: $scope.signin.email,
             password: $scope.signin.password
         }).then(function(authData) {
-            console.log("Logged in as:", authData);
-            console.log($scope);
+            // console.log("Logged in as:", authData);
+            // console.log($scope);
+            document.location.reload(true);
         }).catch(function(error) {
             console.error("Authentication failed:", error);
         });
     };
 
     $scope.logUserOut = function () {
-        console.log($scope);
-        $scope.signin.email = '';
-        $scope.signin.password = '';
+        // console.log($scope);
+        // $scope.signin.email = '';
+        // $scope.signin.password = '';
         Auth.$unauth();
     };
 

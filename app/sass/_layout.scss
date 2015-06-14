@@ -1,0 +1,36 @@
+.landing-container {
+    background-color: #CCCCCC;
+    margin: 60px auto 0 auto;
+    padding: 20px;
+    width: 550px;
+}
+
+.auth-info {
+    text-align: right;
+}
+
+#todo-form {
+    padding-top: 20px;
+
+    input {
+        width: 400px;
+    }
+}
+
+#todo-list {
+    padding-top: 20px;
+
+    .todo-item {
+        padding: 8px 0;
+
+        input {
+            transform: scale(2);
+            /* Webkit browsers*/
+            -webkit-transform: scale(2);
+        }
+    }
+}
+
+.signin {
+    padding-top: 20px;
+}

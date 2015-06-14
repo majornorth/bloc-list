@@ -1,17 +1,14 @@
-<div ng-controller="Auth.controller">
-    <div ng-show="authData">
+<div ng-controller="Auth.controller" class="landing-container">
+    <div ng-show="authData" class="auth-info">
       {{ authData.password.email }} | <a href="#" ng-click="auth.$unauth()">Logout</a>
     </div>
-
-    <h1>todos</h1>
     <ul>
         <li><a ui-sref="landing">Active tasks</a></li>
-        <li><a ui-sref="history">Task history</a></li>
     </ul>
     <section>
         <ul id="todo-list">
             <li ng-repeat="todo in todos" ng-show="hideActive(todo) || todo.completed === true">
-                <div class="view">
+                <div class="view todo-item">
                     <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
                     <label>{{todo.title}} <span>({{todo.priority}})</span></label>
                 </div>
