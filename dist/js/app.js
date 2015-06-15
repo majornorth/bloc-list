@@ -19,8 +19,28 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
 
 blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', function($scope, $firebaseArray, Auth) {
     var authData = Auth.$getAuth();
+
     if (authData) {
-        var url = 'https://bloc-list.firebaseio.com/todos/' + authData.uid;
+        $scope.newListObject = {
+            listTitle: ''
+        };
+
+        $scope.addList = function () {
+            var newListTitle = $scope.newListObject.listTitle.trim();
+            if (!newListTitle.length) {
+                return;
+            }
+
+            var newList = $scope.newListObject.listTitle;
+
+            $scope.newListObject = {
+                listTitle: newList
+            }
+        }
+
+        var list = 'todos';
+
+        var url = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + list;
         var fireRef = new Firebase(url);
     } else {
         return

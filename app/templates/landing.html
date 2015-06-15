@@ -20,6 +20,16 @@
     </div>
 
     <div ng-show="authData">
+        <div>
+            <form ng-controller="Landing.controller" id="list-form" novalidate ng-submit="addList()">
+                <label>Add Task List:</label>
+                <input id="new-list" placeholder="Enter list name" ng-model="newListObject.listTitle" required>
+                <ul>
+                    <li ng-click="logNewLists()">Todos</li>
+                    <li>Groceries</li>
+                </ul>
+            </form>
+        </div>
         <nav>
             <ul>
                 <li><a ui-sref="history">Task history</a></li>
