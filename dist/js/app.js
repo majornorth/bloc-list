@@ -19,11 +19,16 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
 
 blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', function($scope, $firebaseArray, Auth) {
     var authData = Auth.$getAuth();
+    $scope.currentList = 'todos';
 
     if (authData) {
         $scope.newListObject = {
             listTitle: ''
         };
+
+        var listsUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'lists';
+        var listsRef = new Firebase(listsUrl);
+        $scope.lists = $firebaseArray(listsRef);
 
         $scope.addList = function () {
             var newListTitle = $scope.newListObject.listTitle.trim();
@@ -36,17 +41,42 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', f
             $scope.newListObject = {
                 listTitle: newList
             }
+
+            $scope.lists.$add({
+                title: newList
+            });
+
+            $scope.newListObject.listTitle = '';
         }
 
-        var list = 'todos';
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var todosRef = new Firebase(todosUrl);
 
-        var url = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + list;
-        var fireRef = new Firebase(url);
+        $scope.logScope = function () {
+            console.log($scope);
+        };
     } else {
         return
     }
 
-    $scope.todos = $firebaseArray(fireRef);
+    $scope.getList = function (title) {
+        $scope.currentList = title;
+        var currentList = $scope.currentList;
+        if (currentList != 'todos') {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
+        }
+    };
+
+    $scope.logTodosRef = function () {
+        console.log(todosUrl);
+        console.log($scope.selectedList);
+        console.log($scope);
+
+    }
+
+    $scope.todos = $firebaseArray(todosRef);
 
     $scope.newTodoObject = {
         todoTitle: '',
@@ -68,7 +98,12 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', f
         },
     ];
 
-    $scope.addTodo = function () {
+    $scope.addTodo = function (currentList) {
+        if(!currentList){
+            console.log("resetting")
+            var currentList = 'todos'
+        }
+        console.log(currentList);
         var newTodo = $scope.newTodoObject.todoTitle.trim();
         if (!newTodo.length) {
             return;

@@ -14,19 +14,20 @@
             <button ng-click="signUserIn()">Sign In</button>
         </div>
 
-        <div ng-show="authData" class="auth-info">
+        <div ng-show="authData" class="auth-info" ng-click="logTodosRef()">
           {{ authData.password.email }} | <a href="#" ng-click="logUserOut()">Logout</a>
         </div>
     </div>
 
-    <div ng-show="authData">
+    <div ng-show="authData" ng-controller="Landing.controller">
         <div>
-            <form ng-controller="Landing.controller" id="list-form" novalidate ng-submit="addList()">
-                <label>Add Task List:</label>
+            <form id="list-form" novalidate ng-submit="addList()">
+                <label ng-click="logScope()">Add Task List:</label>
                 <input id="new-list" placeholder="Enter list name" ng-model="newListObject.listTitle" required>
-                <ul>
-                    <li ng-click="logNewLists()">Todos</li>
-                    <li>Groceries</li>
+                <ul id="task-lists">
+                    <li ng-repeat="list in lists" ng-click="getList(list.title)">
+                        {{list.title}}
+                    </li>
                 </ul>
             </form>
         </div>
@@ -35,7 +36,7 @@
                 <li><a ui-sref="history">Task history</a></li>
             </ul>
         </nav>
-        <form ng-controller="Landing.controller" id="todo-form" novalidate ng-submit="addTodo()">
+        <form id="todo-form" novalidate ng-submit="addTodo(currentList)">
             <select name="todoPriority" ng-model="newTodoObject.todoPriority" ng-options="option.name for option in priorityOptions track by option.value">
                 <option value="" disabled required>Select Priority</option>
             </select>
