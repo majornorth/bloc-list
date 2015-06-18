@@ -23,6 +23,7 @@
         <div class="lists-container">
             <form id="list-form" novalidate ng-submit="addList()">
                 <ul id="task-lists">
+                    <li ng-click="getList('todos')">todos</li>
                     <li ng-repeat="list in lists" ng-click="getList(list.title)">
                         {{list.title}}
                     </li>
@@ -33,7 +34,7 @@
         <div class="todo-container">
             <nav>
                 <ul>
-                    <li><a ui-sref="history">Task history</a></li>
+                    <li><a ui-sref="history" ng-click="logScope()">Task history</a></li>
                 </ul>
             </nav>
             <form id="todo-form" novalidate ng-submit="addTodo(currentList)">

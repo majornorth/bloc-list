@@ -56,6 +56,7 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', f
         return
     }
 
+    // Move code below into a service
     $scope.getList = function (title) {
         $scope.currentList = title;
         var currentList = $scope.currentList;
@@ -63,7 +64,12 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', f
             var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
+        } else {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + title;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
         }
+        console.log(currentList);
     };
 
     $scope.todos = $firebaseArray(todosRef);
@@ -128,6 +134,10 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', f
         var result = expiryDate < timeNow;
         return result;
     };
+
+    $scope.logScope = function () {
+        console.log($scope);
+    };
 }]);
 
 /* This directive allows us to pass a function in on an enter key to do what we want. */
@@ -145,19 +155,8 @@ blocList.directive('ngEnter', function () {
     };
 });
 
-blocList.controller('History.controller', ['$scope', '$firebaseArray', 'Auth', function($scope, $firebaseArray, Auth) {
-    var authData = Auth.$getAuth();
-        if (authData) {
-        var url = 'https://bloc-list.firebaseio.com/todos/' + authData.uid;
-        var fireRef = new Firebase(url);
-    } else {
-        return
-    }
-    var fireRef = new Firebase(url);
-
-    $scope.todos = $firebaseArray(fireRef);
-
-    $scope.hideActive = function (todo) {
+blocList.controller('History.controller', ['$scope', function($scope) {
+    $scope.showExpired = function (todo) {
         var expiryDate = this.todo.expiryDate;
         var timeNow = Date.now();
         var result = expiryDate < timeNow;
