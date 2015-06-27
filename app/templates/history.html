@@ -1,8 +1,8 @@
 <div ng-controller="Auth.controller" class="landing-container">
     <div ng-show="authData" class="auth-info">
-      {{ authData.password.email }} | <a href="#" ng-click="auth.$unauth()">Logout</a>
+      <span ng-click="logSomeMethod()">{{ authData.password.email }}</span> | <a href="#" ng-click="auth.$unauth()">Logout</a>
     </div>
-    <div ng-show="authData" ng-controller="Landing.controller" class="app-container">
+    <div ng-show="authData" ng-controller="History.controller" class="app-container">
         <div class="lists-container">
             <form id="list-form" novalidate ng-submit="addList()">
                 <ul id="task-lists">
@@ -14,7 +14,7 @@
                 <input id="new-list" placeholder="Add List" ng-model="newListObject.listTitle" required>
             </form>
         </div>
-        <div class="todo-container" ng-controller="History.controller">
+        <div class="todo-container">
             <ul>
                 <li><a ui-sref="landing">Active tasks</a></li>
             </ul>

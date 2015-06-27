@@ -15,7 +15,7 @@
         </div>
 
         <div ng-show="authData" class="auth-info">
-          {{ authData.password.email }} | <a href="#" ng-click="logUserOut()">Logout</a>
+          <span ng-click="logSomeMethod()">{{ authData.password.email }}</span> | <a href="#" ng-click="logUserOut()">Logout</a>
         </div>
     </div>
 
@@ -34,7 +34,7 @@
         <div class="todo-container">
             <nav>
                 <ul>
-                    <li><a ui-sref="history" ng-click="logScope()">Task history</a></li>
+                    <li><a ui-sref="history">Task history</a></li>
                 </ul>
             </nav>
             <form id="todo-form" novalidate ng-submit="addTodo(currentList)">

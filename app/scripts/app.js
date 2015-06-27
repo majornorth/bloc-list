@@ -16,10 +16,18 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
     });
 }]);
 
-blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', function($scope, $firebaseArray, Auth) {
+blocList.service('CurrentList', function() {
+    return {
+        defaults: { name: 'todos' }
+    }
+});
+
+blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', 'CurrentList', function($scope, $firebaseArray, Auth, CurrentList) {
     var authData = Auth.$getAuth();
 
-    $scope.currentList = 'todos';
+    $scope.logSomeMethod = function () {
+        console.log(CurrentList.defaults.name);
+    }
 
     if (authData) {
         $scope.newListObject = {
@@ -57,8 +65,8 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', f
 
     // Move code below into a service
     $scope.getList = function (title) {
-        $scope.currentList = title;
-        var currentList = $scope.currentList;
+        CurrentList.defaults.name = title;
+        var currentList = CurrentList.defaults.name;
         if (currentList != 'todos') {
             var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
             var todosRef = new Firebase(todosUrl);
@@ -68,7 +76,7 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', f
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         }
-        console.log(currentList);
+        console.log(todosUrl);
     };
 
     $scope.todos = $firebaseArray(todosRef);
@@ -154,7 +162,70 @@ blocList.directive('ngEnter', function () {
     };
 });
 
-blocList.controller('History.controller', ['$scope', function($scope) {
+blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$firebaseArray', function($scope, CurrentList, Auth, $firebaseArray) {
+    var authData = Auth.$getAuth();
+
+    if (authData) {
+        $scope.newListObject = {
+            listTitle: ''
+        };
+
+        var listsUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'lists';
+        var listsRef = new Firebase(listsUrl);
+        $scope.lists = $firebaseArray(listsRef);
+
+        $scope.addList = function () {
+            var newListTitle = $scope.newListObject.listTitle.trim();
+            if (!newListTitle.length) {
+                return;
+            }
+
+            var newList = $scope.newListObject.listTitle;
+
+            $scope.newListObject = {
+                listTitle: newList
+            }
+
+            $scope.lists.$add({
+                title: newList
+            });
+
+            $scope.newListObject.listTitle = '';
+        }
+
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var todosRef = new Firebase(todosUrl);
+    } else {
+        return
+    }
+
+    $scope.todos = $firebaseArray(todosRef);
+
+    var currentList = CurrentList.defaults.name;
+    if (currentList != 'todos') {
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+        var todosRef = new Firebase(todosUrl);
+        $scope.todos = $firebaseArray(todosRef);
+    } else {
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var todosRef = new Firebase(todosUrl);
+        $scope.todos = $firebaseArray(todosRef);
+    }
+
+    $scope.getList = function (title) {
+        CurrentList.defaults.name = title;
+        var currentList = CurrentList.defaults.name;
+        if (currentList != 'todos') {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
+        } else {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + title;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
+        }
+    };
+
     $scope.showExpired = function (todo) {
         var expiryDate = this.todo.expiryDate;
         var timeNow = Date.now();
@@ -170,7 +241,11 @@ blocList.factory("Auth", ["$firebaseAuth",
   }
 ]);
 
-blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth) {
+blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', function($scope, Auth, CurrentList) {
+    $scope.logSomeMethod = function () {
+        console.log(CurrentList.defaults.name);
+    }
+
     $scope.auth = Auth;
 
     // any time auth status updates, add the user data to scope
