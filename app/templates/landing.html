@@ -15,7 +15,7 @@
         </div>
 
         <div ng-show="authData" class="auth-info">
-          <span ng-click="logSomeMethod()">{{ authData.password.email }}</span> | <a href="#" ng-click="logUserOut()">Logout</a>
+          <span ng-click="logSomeMethod()">{{ authData.password.email }}</span> &#8226; <a href="#" ng-click="logUserOut()">Logout</a>
         </div>
     </div>
 
@@ -51,6 +51,7 @@
                             <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
                             <label>{{todo.title}} <span>({{todo.priority}})</span></label>
                         </div>
+                        <div ng-if="!todos">Add your first todo to this list</div>
                     </li>
                 </ul>
             </section>

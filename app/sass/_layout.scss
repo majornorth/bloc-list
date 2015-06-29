@@ -1,12 +1,22 @@
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: #f9f9f9;
+}
+
 .landing-container {
-    background-color: #CCCCCC;
     margin: 60px auto 0 auto;
-    padding: 20px;
-    width: 550px;
+    width: 590px;
 }
 
 .app-container {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
     margin-top: 20px;
+    padding: 20px;
 }
 
 .lists-container {

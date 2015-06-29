@@ -58,7 +58,8 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', '
             $scope.newListObject.listTitle = '';
         }
 
-        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var currentList = CurrentList.defaults.name || 'todos';
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
         var todosRef = new Firebase(todosUrl);
     } else {
         return
@@ -77,7 +78,6 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', '
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         }
-        console.log(todosUrl);
     };
 
     $scope.todos = $firebaseArray(todosRef);
