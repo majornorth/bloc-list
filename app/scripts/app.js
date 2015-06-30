@@ -6,15 +6,29 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
     $stateProvider
     .state('landing', {
         url: '/',
-        controller: 'Landing.controller',
-        templateUrl: '/templates/landing.html'
+        views: {
+            'landing': {
+                controller: 'Landing.controller',
+                templateUrl: '/templates/landing.html'
+            }
+        }
     })
     .state('history', {
         url: '/history',
-        controller: 'History.controller',
-        templateUrl: '/templates/history.html'
+        views: {
+            'history': {
+                controller: 'History.controller',
+                templateUrl: '/templates/history.html'
+            }
+        }
     });
 }]);
+
+blocList.directive('ngAuth', function () {
+    return {
+        templateUrl: '/templates/auth.html'
+    }
+});
 
 blocList.service('CurrentList', function() {
     return {

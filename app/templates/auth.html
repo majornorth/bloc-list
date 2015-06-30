@@ -1,0 +1,19 @@
+<div class="auth-container">
+    <div ng-hide="authData" class="signup">
+        <h3>Sign up</h3>
+        Email: <input type="text" ng-model="signup.email">
+        Password: <input type="password" ng-model="signup.password">
+        <button ng-click="createUser()">Create User</button>
+    </div>
+
+    <div ng-hide="authData" class="signin">
+        <h3>Sign in</h3>
+        Email: <input type="text" ng-model="signin.email">
+        Password: <input type="password" ng-model="signin.password" ng-enter="signUserIn()">
+        <button ng-click="signUserIn()">Sign In</button>
+    </div>
+
+    <div ng-show="authData" class="auth-info">
+      <span ng-click="logSomeMethod()">{{ authData.password.email }}</span> &#8226; <a href="#" ng-click="logUserOut()">Logout</a>
+    </div>
+</div>
