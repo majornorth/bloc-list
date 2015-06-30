@@ -1,8 +1,46 @@
+a {
+    text-decoration: none;
+}
+
+body {
+    background-color: #f9f9f9;
+}
+
 .landing-container {
-    background-color: #CCCCCC;
     margin: 60px auto 0 auto;
+    width: 590px;
+}
+
+.app-container {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    margin-top: 20px;
     padding: 20px;
-    width: 550px;
+}
+
+.lists-container {
+    display: inline-block;
+    width: 160px;
+    vertical-align: top;
+
+    #task-lists {
+        margin-top: 20px;
+
+        li {
+            cursor: default;
+            padding: 10px 0;
+        }
+    }
+
+    #new-list {
+        margin-top: 10px;
+    }
+}
+
+.todo-container {
+    display: inline-block;
+    width: 380px;
 }
 
 .auth-info {
@@ -13,7 +51,7 @@
     padding-top: 20px;
 
     input {
-        width: 400px;
+        width: 260px;
     }
 }
 

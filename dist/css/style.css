@@ -1,8 +1,35 @@
+a {
+  text-decoration: none; }
+
+body {
+  background-color: #f9f9f9; }
+
 .landing-container {
-  background-color: #CCCCCC;
   margin: 60px auto 0 auto;
-  padding: 20px;
-  width: 550px; }
+  width: 590px; }
+
+.app-container {
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  margin-top: 20px;
+  padding: 20px; }
+
+.lists-container {
+  display: inline-block;
+  width: 160px;
+  vertical-align: top; }
+  .lists-container #task-lists {
+    margin-top: 20px; }
+    .lists-container #task-lists li {
+      cursor: default;
+      padding: 10px 0; }
+  .lists-container #new-list {
+    margin-top: 10px; }
+
+.todo-container {
+  display: inline-block;
+  width: 380px; }
 
 .auth-info {
   text-align: right; }
@@ -10,7 +37,7 @@
 #todo-form {
   padding-top: 20px; }
   #todo-form input {
-    width: 400px; }
+    width: 260px; }
 
 #todo-list {
   padding-top: 20px; }
