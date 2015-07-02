@@ -1,15 +1,33 @@
-<h1>todos</h1>
-<ul>
-    <li><a ui-sref="landing">Active tasks</a></li>
-    <li><a ui-sref="history">Task history</a></li>
-</ul>
-<section>
-    <ul id="todo-list">
-        <li ng-repeat="todo in todos" ng-show="hideActive(todo) || todo.completed === true">
-            <div class="view">
-                <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
-                <label>{{todo.title}} <span>({{todo.priority}})</span></label>
-            </div>
-        </li>
-    </ul>
-</section>
+<div ng-controller="Auth.controller" class="landing-container">
+
+    <div ng-auth></div>
+
+    <div ng-show="authData" ng-controller="History.controller" class="app-container">
+        <div class="lists-container">
+            <form id="list-form" novalidate ng-submit="addList()">
+                <ul id="task-lists">
+                    <li ng-click="getList('todos')">todos</li>
+                    <li ng-repeat="list in lists" ng-click="getList(list.title)">
+                        {{list.title}}
+                    </li>
+                </ul>
+                <input id="new-list" placeholder="Add List" ng-model="newListObject.listTitle" required>
+            </form>
+        </div>
+        <div class="todo-container">
+            <ul>
+                <li><a ui-sref="landing">Active tasks</a></li>
+            </ul>
+            <section>
+                <ul id="todo-list">
+                    <li ng-repeat="todo in todos" ng-show="showExpired(todo) || todo.completed === true">
+                        <div class="view todo-item">
+                            <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
+                            <label>{{todo.title}} <span>({{todo.priority}})</span></label>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>

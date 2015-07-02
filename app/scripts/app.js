@@ -6,41 +6,147 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
     $stateProvider
     .state('landing', {
         url: '/',
-        controller: 'Landing.controller',
-        templateUrl: '/templates/landing.html'
+        views: {
+            'landing': {
+                controller: 'Landing.controller',
+                templateUrl: '/templates/landing.html'
+            }
+        }
     })
     .state('history', {
         url: '/history',
-        controller: 'History.controller',
-        templateUrl: '/templates/history.html'
+        views: {
+            'history': {
+                controller: 'History.controller',
+                templateUrl: '/templates/history.html'
+            }
+        }
     });
 }]);
 
-blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
-    var url = 'https://bloc-list.firebaseio.com/todos';
-    var fireRef = new Firebase(url);
+blocList.directive('ngAuth', function () {
+    return {
+        templateUrl: '/templates/auth.html'
+    }
+});
 
-    $scope.todos = $firebaseArray(fireRef);
-    $scope.newTodo = '';
-    $scope.todoPriority = 'Select Priority';
+blocList.service('CurrentList', function() {
+    return {
+        defaults: { name: 'todos' }
+    }
+});
 
-    $scope.addTodo = function () {
-        var newTodo = $scope.newTodo.trim();
+blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', 'CurrentList', function($scope, $firebaseArray, Auth, CurrentList) {
+    var authData = Auth.$getAuth();
+
+    $scope.logSomeMethod = function () {
+        console.log(CurrentList.defaults.name);
+    }
+
+    if (authData) {
+        $scope.newListObject = {
+            listTitle: ''
+        };
+
+        var listsUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'lists';
+        var listsRef = new Firebase(listsUrl);
+        $scope.lists = $firebaseArray(listsRef);
+
+        $scope.addList = function () {
+            var newListTitle = $scope.newListObject.listTitle.trim();
+            if (!newListTitle.length) {
+                return;
+            }
+
+            var newList = $scope.newListObject.listTitle;
+
+            $scope.newListObject = {
+                listTitle: newList
+            }
+
+            $scope.lists.$add({
+                title: newList
+            });
+
+            $scope.newListObject.listTitle = '';
+        }
+
+        var currentList = CurrentList.defaults.name || 'todos';
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+        var todosRef = new Firebase(todosUrl);
+    } else {
+        return
+    }
+
+    // Move code below into a service
+    $scope.getList = function (title) {
+        CurrentList.defaults.name = title;
+        var currentList = CurrentList.defaults.name;
+        if (currentList != 'todos') {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
+        } else {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + title;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
+        }
+    };
+
+    $scope.todos = $firebaseArray(todosRef);
+
+    $scope.newTodoObject = {
+        todoTitle: '',
+        todoPriority: ''
+    };
+
+    $scope.priorityOptions = [
+        {
+          name: 'Low',
+          value: 'low'
+        },
+        {
+          name: 'Medium',
+          value: 'medium'
+        },
+        {
+          name: 'Urgent',
+          value: 'urgent'
+        },
+    ];
+
+    $scope.addTodo = function (currentList) {
+        if(!currentList){
+            console.log("resetting")
+            var currentList = 'todos'
+        }
+        console.log(currentList);
+        var newTodo = $scope.newTodoObject.todoTitle.trim();
         if (!newTodo.length) {
             return;
         }
-        var todoPriority = $scope.todoPriority;
+
+        var priorityValue = $scope.newTodoObject.todoPriority.value;
+
+        if (priorityValue === undefined) {
+            $scope.priorityUndefinedError = 'Please select a priority level for your todo';
+            $scope.priorityUndefinedTrue = true;
+            return;
+        }
 
         var sevenDaysFromNow = 604800000;
 
         $scope.todos.$add({
             title: newTodo,
-            priority: todoPriority,
+            priority: priorityValue,
             completed: false,
             submitted: Date.now(),
             expiryDate: Date.now() + sevenDaysFromNow
         });
-        $scope.newTodo = '';
+
+        $scope.newTodoObject.todoTitle = '';
+        $scope.newTodoObject.todoPriority = '';
+        $scope.priorityUndefinedTrue = false;
     };
 
     $scope.hideExpired = function () {
@@ -49,15 +155,92 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', function(
         var result = expiryDate < timeNow;
         return result;
     };
+
+    $scope.logScope = function () {
+        console.log($scope);
+    };
 }]);
 
-blocList.controller('History.controller', ['$scope', '$firebaseArray', function($scope, $firebaseArray) {
-    var url = 'https://bloc-list.firebaseio.com/todos';
-    var fireRef = new Firebase(url);
+/* This directive allows us to pass a function in on an enter key to do what we want. */
+blocList.directive('ngEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.ngEnter);
+                });
 
-    $scope.todos = $firebaseArray(fireRef);
+                event.preventDefault();
+            }
+        });
+    };
+});
 
-    $scope.hideActive = function (todo) {
+blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$firebaseArray', function($scope, CurrentList, Auth, $firebaseArray) {
+    var authData = Auth.$getAuth();
+
+    if (authData) {
+        $scope.newListObject = {
+            listTitle: ''
+        };
+
+        var listsUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'lists';
+        var listsRef = new Firebase(listsUrl);
+        $scope.lists = $firebaseArray(listsRef);
+
+        $scope.addList = function () {
+            var newListTitle = $scope.newListObject.listTitle.trim();
+            if (!newListTitle.length) {
+                return;
+            }
+
+            var newList = $scope.newListObject.listTitle;
+
+            $scope.newListObject = {
+                listTitle: newList
+            }
+
+            $scope.lists.$add({
+                title: newList
+            });
+
+            $scope.newListObject.listTitle = '';
+        }
+
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var todosRef = new Firebase(todosUrl);
+    } else {
+        return
+    }
+
+    $scope.todos = $firebaseArray(todosRef);
+
+    var currentList = CurrentList.defaults.name;
+    if (currentList != 'todos') {
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+        var todosRef = new Firebase(todosUrl);
+        $scope.todos = $firebaseArray(todosRef);
+    } else {
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var todosRef = new Firebase(todosUrl);
+        $scope.todos = $firebaseArray(todosRef);
+    }
+
+    $scope.getList = function (title) {
+        CurrentList.defaults.name = title;
+        var currentList = CurrentList.defaults.name;
+        if (currentList != 'todos') {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
+        } else {
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + title;
+            var todosRef = new Firebase(todosUrl);
+            $scope.todos = $firebaseArray(todosRef);
+        }
+    };
+
+    $scope.showExpired = function (todo) {
         var expiryDate = this.todo.expiryDate;
         var timeNow = Date.now();
         var result = expiryDate < timeNow;
@@ -72,7 +255,18 @@ blocList.factory("Auth", ["$firebaseAuth",
   }
 ]);
 
-blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth) {
+blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', function($scope, Auth, CurrentList) {
+    $scope.logSomeMethod = function () {
+        console.log(CurrentList.defaults.name);
+    }
+
+    $scope.auth = Auth;
+
+    // any time auth status updates, add the user data to scope
+    $scope.auth.$onAuth(function(authData) {
+      $scope.authData = authData;
+    });
+
     $scope.createUser = function() {
         Auth.$createUser({
             email: $scope.signup.email,
@@ -96,28 +290,24 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', function($scope, Auth)
             email: $scope.signin.email,
             password: $scope.signin.password
         }).then(function(authData) {
-            console.log("Logged in as:", authData);
+            // console.log("Logged in as:", authData);
+            // console.log($scope);
+            document.location.reload(true);
         }).catch(function(error) {
             console.error("Authentication failed:", error);
         });
     };
 
-    $scope.isUserSignedIn = function() {
-        authData = Auth.$getAuth();
-
-        if (authData) {
-            $scope.userData = {
-                email: authData.password.email,
-                password: authData.password,
-                authData: Auth
-            };
-        }
-
-        return authData;
+    $scope.logUserOut = function () {
+        // console.log($scope);
+        // $scope.signin.email = '';
+        // $scope.signin.password = '';
+        Auth.$unauth();
     };
 
     $scope.logAuthData = function() {
         authData = Auth.$getAuth();
         console.log(Auth);
+        return authData;
     };
 }]);
