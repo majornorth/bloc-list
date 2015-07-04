@@ -1,16 +1,20 @@
 <div class="auth-container">
-    <div ng-hide="authData" class="signup">
-        <h3>Sign up</h3>
-        Email: <input type="text" ng-model="signup.email">
-        Password: <input type="password" ng-model="signup.password">
-        <button ng-click="createUser()">Create User</button>
-    </div>
+    <div ng-hide="authData" id="auth-landing">
+        <div ng-hide="authData" class="signup">
+            <h1>Reminders+</h1>
+            <h2>An online alternative to the MacOS Reminders app</h2>
+            <h3>Sign up</h3>
+            <input id="signup-email" type="text" ng-model="signup.email" placeholder="Email">
+            <input id="signup-password" type="password" ng-model="signup.password" placeholder="Password">
+            <button ng-click="createUser()">Create User</button>
+        </div>
 
-    <div ng-hide="authData" class="signin">
-        <h3>Sign in</h3>
-        Email: <input type="text" ng-model="signin.email">
-        Password: <input type="password" ng-model="signin.password" ng-enter="signUserIn()">
-        <button ng-click="signUserIn()">Sign In</button>
+        <div ng-hide="authData" class="signin">
+            <h3>Sign in</h3>
+            <input id="signin-email" type="text" ng-model="signin.email" placeholder="Email">
+            <input id="signin-password" type="password" ng-model="signin.password" ng-enter="signUserIn()" placeholder="Password">
+            <button ng-click="signUserIn()">Sign In</button>
+        </div>
     </div>
 
     <div ng-show="authData" class="auth-info">

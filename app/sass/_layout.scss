@@ -9,7 +9,8 @@ body {
     background-color: #f9f9f9;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
     background: none;
     box-shadow: none;
     -webkit-appearance: none;
@@ -48,7 +49,8 @@ input[type="text"] {
             padding: 10px 0;
             color: #aaa;
 
-            .active {
+            &.selected-list {
+                color: $brand-color;
                 text-decoration: underline;
             }
 
@@ -68,14 +70,73 @@ input[type="text"] {
     width: 380px;
 }
 
-.auth-info {
-    text-align: right;
+.auth-container {
 
-    .user-email {
-        color: #aaa;
+    #auth-landing {
+
+        background-color: #FFFFFF;
+        border: 1px solid #CCCCCC;
+        border-radius: 4px;
+        padding: 20px;
+
+        h1 {
+            color: #414141;
+            font-size: 34px;
+            font-weight: 100;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        h2 {
+            color: #bbb;
+            line-height: 1.2;
+            text-align: center;
+        }
+
+        h3 {
+            color: #414141;
+            font-size: 21px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #signup-email,
+        #signup-password,
+        #signin-email,
+        #signin-password {
+            display: block;
+            margin: 0 auto;
+            width: 260px;
+        }
+
+        #signup-password,
+        #signin-password {
+            margin: 20px auto 0 auto;
+        }
+
+        button {
+            color: #fff;
+            background:  $brand-color;
+            border: none;
+            border-radius: 5px;
+            display: block;
+            font-size: 14px;
+            height: 34px;
+            margin: 20px auto 0 auto;
+            vertical-align: 50%;
+            width: 108px;
+        }
     }
-}
 
-.signin {
-    padding-top: 20px;
+    .auth-info {
+        text-align: right;
+
+        .user-email {
+            color: #aaa;
+        }
+    }
+
+    .signin {
+        padding-top: 20px;
+    }
 }

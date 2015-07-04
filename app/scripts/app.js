@@ -91,14 +91,21 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', '
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         }
+    };
 
-        $scope.setMaster = function (section) {
-            $scope.selected = section;
+    $scope.setSelectedClass = function ($event) {
+        var taskLists = document.getElementById("task-lists");
+        var selectedList = null;
+        for (var i = 0; i < taskLists.childNodes.length; i++) {
+            if (taskLists.childNodes[i].className == "selected-list") {
+              selectedList = taskLists.childNodes[i];
+              break;
+            }
         }
-
-        $scope.isSelected = function (section) {
-            return $scope.selected === section;
-        };
+        if (selectedList != null) {
+            selectedList.removeAttribute("class", "selected-list");
+        }
+        $event.currentTarget.setAttribute("class", "selected-list");
     };
 
     $scope.todos = $firebaseArray(todosRef);

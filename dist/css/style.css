@@ -24,7 +24,7 @@ a {
 body {
   background-color: #f9f9f9; }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
   background: none;
   box-shadow: none;
   -webkit-appearance: none;
@@ -57,7 +57,8 @@ input[type="text"] {
       cursor: default;
       padding: 10px 0;
       color: #aaa; }
-      .lists-container #task-lists li .active {
+      .lists-container #task-lists li.selected-list {
+        color: #409B9D;
         text-decoration: underline; }
       .lists-container #task-lists li:hover {
         color: #409B9D; }
@@ -68,12 +69,48 @@ input[type="text"] {
   display: inline-block;
   width: 380px; }
 
-.auth-info {
+.auth-container #auth-landing {
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  padding: 20px; }
+  .auth-container #auth-landing h1 {
+    color: #414141;
+    font-size: 34px;
+    font-weight: 100;
+    line-height: 1.4;
+    text-align: center; }
+  .auth-container #auth-landing h2 {
+    color: #bbb;
+    line-height: 1.2;
+    text-align: center; }
+  .auth-container #auth-landing h3 {
+    color: #414141;
+    font-size: 21px;
+    margin-top: 20px;
+    text-align: center; }
+  .auth-container #auth-landing #signup-email, .auth-container #auth-landing #signup-password, .auth-container #auth-landing #signin-email, .auth-container #auth-landing #signin-password {
+    display: block;
+    margin: 0 auto;
+    width: 260px; }
+  .auth-container #auth-landing #signup-password, .auth-container #auth-landing #signin-password {
+    margin: 20px auto 0 auto; }
+  .auth-container #auth-landing button {
+    color: #fff;
+    background: #409B9D;
+    border: none;
+    border-radius: 5px;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    margin: 20px auto 0 auto;
+    vertical-align: 50%;
+    width: 108px; }
+.auth-container .auth-info {
   text-align: right; }
-  .auth-info .user-email {
+  .auth-container .auth-info .user-email {
     color: #aaa; }
-
-.signin {
+.auth-container .signin {
   padding-top: 20px; }
 
 /* http://meyerweb.com/eric/tools/css/reset/

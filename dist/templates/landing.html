@@ -6,10 +6,10 @@
         <div class="lists-container">
             <form id="list-form" novalidate ng-submit="addList()">
                 <ul id="task-lists">
-                    <li ng-click="getList('todos')">
+                    <li ng-click="getList('todos'); setSelectedClass($event)">
                         todos
                     </li>
-                    <li ng-class="{active : isSelected(section)}" ng-repeat="list in lists" ng-click="getList(list.title)">
+                    <li ng-repeat="list in lists" ng-click="getList(list.title); setSelectedClass($event)">
                         {{list.title}}
                     </li>
                 </ul>
