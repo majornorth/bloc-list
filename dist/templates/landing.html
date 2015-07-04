@@ -6,12 +6,14 @@
         <div class="lists-container">
             <form id="list-form" novalidate ng-submit="addList()">
                 <ul id="task-lists">
-                    <li ng-click="getList('todos')">todos</li>
-                    <li ng-repeat="list in lists" ng-click="getList(list.title)">
+                    <li ng-click="getList('todos')">
+                        todos
+                    </li>
+                    <li ng-class="{active : isSelected(section)}" ng-repeat="list in lists" ng-click="getList(list.title)">
                         {{list.title}}
                     </li>
                 </ul>
-                <input id="new-list" placeholder="Add List" ng-model="newListObject.listTitle" required>
+                <input id="new-list" placeholder="Add List" ng-model="newListObject.listTitle" required type="text">
             </form>
         </div>
         <div class="todo-container">
@@ -24,7 +26,7 @@
                 <select name="todoPriority" ng-model="newTodoObject.todoPriority" ng-options="option.name for option in priorityOptions track by option.value">
                     <option value="" disabled required>Select Priority</option>
                 </select>
-                <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodoObject.todoTitle" required>
+                <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodoObject.todoTitle" required type="text">
                 <div ng-model="priorityUndefinedTrue" ng-if="priorityUndefinedTrue">{{ priorityUndefinedError }}</div>
             </form>
             <section>
@@ -34,7 +36,6 @@
                             <input class="toggle" type="checkbox" ng-model="todo.completed" ng-change="todos.$save(todo)">
                             <label>{{todo.title}} <span>({{todo.priority}})</span></label>
                         </div>
-                        <div ng-if="!todos">Add your first todo to this list</div>
                     </li>
                 </ul>
             </section>

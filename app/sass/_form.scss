@@ -1,0 +1,23 @@
+#todo-form {
+    padding-top: 20px;
+
+    select[name="todoPriority"] {
+        background: none;
+        box-shadow: none;
+        -webkit-appearance: none;
+        border: none;
+        border-bottom: 1px solid rgba(67, 130, 143, 0.3);;
+        border-radius: 0;
+        font-size: 14px;
+        height: 34px;
+        line-height: 1.4;
+        outline: none;
+    }
+
+    input {
+        width: 240px;
+        height: 31px;
+        line-height: 1.4;
+        margin-left: 20px;
+    }
+}

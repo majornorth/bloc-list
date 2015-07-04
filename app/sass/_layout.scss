@@ -1,4 +1,7 @@
+$brand-color: #409B9D;
+
 a {
+    color: $brand-color;
     text-decoration: none;
 }
 
@@ -6,8 +9,21 @@ body {
     background-color: #f9f9f9;
 }
 
+input[type="text"] {
+    background: none;
+    box-shadow: none;
+    -webkit-appearance: none;
+    border: none;
+    border-bottom: 1px solid rgba(67, 130, 143, 0.3);;
+    border-radius: 0;
+    font-size: 14px;
+    height: 31px;
+    line-height: 1.4;
+    outline: none;
+}
+
 .landing-container {
-    margin: 60px auto 0 auto;
+    margin: 60px auto 120px auto;
     width: 590px;
 }
 
@@ -30,11 +46,20 @@ body {
         li {
             cursor: default;
             padding: 10px 0;
+            color: #aaa;
+
+            .active {
+                text-decoration: underline;
+            }
+
+            &:hover {
+                color: $brand-color;
+            }
         }
     }
 
     #new-list {
-        margin-top: 10px;
+        width: 138px;
     }
 }
 
@@ -45,27 +70,9 @@ body {
 
 .auth-info {
     text-align: right;
-}
 
-#todo-form {
-    padding-top: 20px;
-
-    input {
-        width: 260px;
-    }
-}
-
-#todo-list {
-    padding-top: 20px;
-
-    .todo-item {
-        padding: 8px 0;
-
-        input {
-            transform: scale(2);
-            /* Webkit browsers*/
-            -webkit-transform: scale(2);
-        }
+    .user-email {
+        color: #aaa;
     }
 }
 

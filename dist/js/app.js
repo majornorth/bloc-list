@@ -92,6 +92,14 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', '
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         }
+
+        $scope.setMaster = function (section) {
+            $scope.selected = section;
+        }
+
+        $scope.isSelected = function (section) {
+            return $scope.selected === section;
+        };
     };
 
     $scope.todos = $firebaseArray(todosRef);
