@@ -192,14 +192,14 @@ blocList.directive('ngEnter', function () {
     };
 });
 
-blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$firebaseArray', function($scope, CurrentList, Auth, $firebaseArray) {
+blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$firebaseArray', 'AuthData', function($scope, CurrentList, Auth, $firebaseArray, AuthData) {
 
-    if (authData) {
+    if (AuthData) {
         $scope.newListObject = {
             listTitle: ''
         };
 
-        var listsUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'lists';
+        var listsUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + 'lists';
         var listsRef = new Firebase(listsUrl);
         $scope.lists = $firebaseArray(listsRef);
 
@@ -222,7 +222,7 @@ blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$fi
             $scope.newListObject.listTitle = '';
         }
 
-        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + 'todos';
         var todosRef = new Firebase(todosUrl);
     } else {
         return
@@ -232,11 +232,11 @@ blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$fi
 
     var currentList = CurrentList.defaults.name;
     if (currentList != 'todos') {
-        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + currentList;
         var todosRef = new Firebase(todosUrl);
         $scope.todos = $firebaseArray(todosRef);
     } else {
-        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'todos';
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + 'todos';
         var todosRef = new Firebase(todosUrl);
         $scope.todos = $firebaseArray(todosRef);
     }
@@ -245,11 +245,11 @@ blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$fi
         CurrentList.defaults.name = title;
         var currentList = CurrentList.defaults.name;
         if (currentList != 'todos') {
-            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + currentList;
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         } else {
-            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + title;
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + title;
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         }
