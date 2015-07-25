@@ -37,19 +37,20 @@ blocList.service('CurrentList', function() {
     }
 });
 
-blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', 'CurrentList', function($scope, $firebaseArray, Auth, CurrentList) {
-    var authData = Auth.$getAuth();
+blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', 'CurrentList', 'AuthData', function($scope, $firebaseArray, Auth, CurrentList, AuthData) {
+
+    console.log(AuthData);
 
     $scope.logSomeMethod = function () {
         console.log(CurrentList.defaults.name);
     }
 
-    if (authData) {
+    if (AuthData) {
         $scope.newListObject = {
             listTitle: ''
         };
 
-        var listsUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + 'lists';
+        var listsUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + 'lists';
         var listsRef = new Firebase(listsUrl);
         $scope.lists = $firebaseArray(listsRef);
 
@@ -73,7 +74,7 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', '
         }
 
         var currentList = CurrentList.defaults.name || 'todos';
-        var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+        var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + currentList;
         var todosRef = new Firebase(todosUrl);
     } else {
         return
@@ -84,11 +85,11 @@ blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', '
         CurrentList.defaults.name = title;
         var currentList = CurrentList.defaults.name;
         if (currentList != 'todos') {
-            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + currentList;
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + currentList;
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         } else {
-            var todosUrl = 'https://bloc-list.firebaseio.com/' + authData.uid + '/' + title;
+            var todosUrl = 'https://bloc-list.firebaseio.com/' + AuthData.uid + '/' + title;
             var todosRef = new Firebase(todosUrl);
             $scope.todos = $firebaseArray(todosRef);
         }
@@ -193,7 +194,6 @@ blocList.directive('ngEnter', function () {
 });
 
 blocList.controller('History.controller', ['$scope', 'CurrentList', 'Auth', '$firebaseArray', function($scope, CurrentList, Auth, $firebaseArray) {
-    var authData = Auth.$getAuth();
 
     if (authData) {
         $scope.newListObject = {
@@ -271,7 +271,15 @@ blocList.factory("Auth", ["$firebaseAuth",
   }
 ]);
 
-blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', function($scope, Auth, CurrentList) {
+blocList.factory("AuthData", ["Auth",
+    function(Auth) {
+        var authData = Auth.$getAuth();
+        return authData;
+    }
+]);
+
+blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', '$state', function($scope, Auth, CurrentList, $state) {
+
     $scope.logSomeMethod = function () {
         console.log(CurrentList.defaults.name);
     }
@@ -308,7 +316,9 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', functio
         }).then(function(authData) {
             // console.log("Logged in as:", authData);
             // console.log($scope);
-            document.location.reload(true);
+            // document.location.reload(true);
+            // $state.go('landing');
+            $state.reload();
         }).catch(function(error) {
             console.error("Authentication failed:", error);
         });
@@ -319,6 +329,7 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', functio
         // $scope.signin.email = '';
         // $scope.signin.password = '';
         Auth.$unauth();
+        $state.go('landing');
     };
 
     $scope.logAuthData = function() {
