@@ -1,6 +1,8 @@
 <div ng-controller="Auth.controller" class="landing-container">
 
-    <div ng-auth></div>
+    <div ng-show="authData" class="auth-info">
+      <span ng-click="logSomeMethod()" class="user-email">{{ authData.password.email }}</span> &#8226; <a href="#" ng-click="logUserOut()">Logout</a>
+    </div>
 
     <div ng-show="authData" ng-controller="History.controller" class="app-container">
         <div class="lists-container">

@@ -128,15 +128,15 @@ input[type="password"] {
         }
     }
 
-    .auth-info {
-        text-align: right;
-
-        .user-email {
-            color: #aaa;
-        }
-    }
-
     .signin {
         padding-top: 20px;
+    }
+}
+
+.auth-info {
+    text-align: right;
+
+    .user-email {
+        color: #aaa;
     }
 }

@@ -1,12 +1,14 @@
 <div ng-controller="Auth.controller" class="landing-container">
 
-    <div ng-auth></div>
+    <div ng-show="authData" class="auth-info">
+      <span ng-click="logSomeMethod()" class="user-email">{{ authData.password.email }}</span> &#8226; <a href="#" ng-click="logUserOut()">Logout</a>
+    </div>
 
     <div ng-show="authData" ng-controller="Landing.controller" class="app-container">
         <div class="lists-container">
             <form id="list-form" novalidate ng-submit="addList()">
                 <ul id="task-lists">
-                    <li ng-click="getList('todos'); setSelectedClass($event)">
+                    <li ng-click="getList('todos'); setSelectedClass($event)" class="selected-list">
                         todos
                     </li>
                     <li ng-repeat="list in lists" ng-click="getList(list.title); setSelectedClass($event)">

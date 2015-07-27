@@ -4,8 +4,17 @@ blocList.config(['$stateProvider', '$locationProvider', function($stateProvider,
     $locationProvider.html5Mode(true);
 
     $stateProvider
-    .state('landing', {
+    .state('auth', {
         url: '/',
+        views: {
+            'auth': {
+                controller: 'Auth.controller',
+                templateUrl: '/templates/auth.html'
+            }
+        }
+    })
+    .state('landing', {
+        url: '/todos',
         views: {
             'landing': {
                 controller: 'Landing.controller',
@@ -38,7 +47,8 @@ blocList.service('CurrentList', function() {
 
 blocList.controller('Landing.controller', ['$scope', '$firebaseArray', 'Auth', 'CurrentList', 'AuthData', function($scope, $firebaseArray, Auth, CurrentList, AuthData) {
 
-    console.log(AuthData);
+    console.log("This is landing controller", AuthData);
+    // console.log("This is landing scope:", $scope);
 
     $scope.logSomeMethod = function () {
         console.log(CurrentList.defaults.name);
@@ -277,7 +287,7 @@ blocList.factory("AuthData", ["Auth",
     }
 ]);
 
-blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', '$state', function($scope, Auth, CurrentList, $state) {
+blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', '$state', function($scope, Auth, CurrentList, $state, AuthData) {
 
     $scope.logSomeMethod = function () {
         console.log(CurrentList.defaults.name);
@@ -314,10 +324,12 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', '$state
             password: $scope.signin.password
         }).then(function(authData) {
             // console.log("Logged in as:", authData);
-            // console.log($scope);
+            // var AuthData = authData;
+            // console.log("And this is AuthData:", AuthData);
+            // console.log("And this is Auth:", Auth);
+            // console.log("And this is $scope:", $scope);
             // document.location.reload(true);
-            // $state.go('landing');
-            $state.reload();
+            $state.go('landing');
         }).catch(function(error) {
             console.error("Authentication failed:", error);
         });
@@ -328,7 +340,7 @@ blocList.controller('Auth.controller', ['$scope', 'Auth', 'CurrentList', '$state
         // $scope.signin.email = '';
         // $scope.signin.password = '';
         Auth.$unauth();
-        $state.go('landing');
+        $state.go('auth');
     };
 
     $scope.logAuthData = function() {

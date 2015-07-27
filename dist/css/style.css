@@ -106,12 +106,13 @@ input[type="text"], input[type="password"] {
     margin: 20px auto 0 auto;
     vertical-align: 50%;
     width: 108px; }
-.auth-container .auth-info {
-  text-align: right; }
-  .auth-container .auth-info .user-email {
-    color: #aaa; }
 .auth-container .signin {
   padding-top: 20px; }
+
+.auth-info {
+  text-align: right; }
+  .auth-info .user-email {
+    color: #aaa; }
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
